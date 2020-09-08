@@ -18,10 +18,12 @@ Mac users
 
 ### Docker
 
-Build docker image:
+Build docker container
+
     docker build -f ./Dockerfile -t swoole-php .
 
 MacOS/Linux
+
     docker run --rm -p 9501:9501 -v $(pwd):/app -w /app swoole-php server.php
 
 Windows
