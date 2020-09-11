@@ -13,6 +13,6 @@ class Router {
 
     public function resolve(Request $request)
     {
-        var_dump($request);
+        var_dump($request->server['request_uri']);
     }
 }
