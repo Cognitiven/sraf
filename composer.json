@@ -1,8 +1,15 @@
 {
+    "config": {
+        "optimize-autoloader": true
+    },
     "autoload": {
         "psr-4": {
             "Framework\\": "framework/",
             "Api\\": "api/"
-        }
+        },
+        "classmap": [
+            "api/",
+            "framework/"
+        ]
     }
 }
