@@ -4,6 +4,8 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Swoole\HTTP\Server;
 use Framework\Application;
+use Framework\Components\EndpointAutoloader;
+use Framework\Exceptions\EndpointDoesNotExist;
 
 
 $http = new Server("0.0.0.0", 9501);
@@ -13,8 +15,13 @@ $http->on('start', function ($server) {
 });
 
 $http->on('request', function ($request, $response) {
-     $application = new Application($request);
-     $application->main();
+    try {
+        $application = new Application($request);
+        $application->main();
+    }
+    catch(EndpointDoesNotExist $exception) {
+        var_dump($exception);
+    }
 });
 
 $http->start();
