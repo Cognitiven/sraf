@@ -22,6 +22,9 @@ $http->on('request', function ($request, $response) {
     catch(EndpointDoesNotExist $exception) {
         var_dump($exception);
     }
+    catch(\Exception $exception) {
+        var_dump($exception->getMessage());
+    }
 });
 
 $http->start();
