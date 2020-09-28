@@ -26,7 +26,7 @@ class TestEndpoint extends BaseEndpoint {
         // phpinfo(INFO_MODULES);
 
         var_dump(
-            $db->count('select * from artists;')
+            $db->row('select * from artists where id = :id;', array('id' => 2))
         );
     }
 }

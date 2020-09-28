@@ -73,6 +73,84 @@ final class Database {
         return $this->db->lastInsertId();
     }
 
+    public function insert(string $table, array $data): string
+    {
+        //add columns into comma seperated string
+        $columns = implode(',', array_keys($data));
+
+        //get values
+        $values = array_values($data);
+
+        $placeholders = array_map(function ($val) {
+            return '?';
+        }, array_keys($data));
+
+        //convert array into comma seperated string
+        $placeholders = implode(',', array_values($placeholders));
+
+        $this->run("INSERT INTO $table ($columns) VALUES ($placeholders)", $values);
+
+        return $this->lastInsertId();
+    }
+
+    public function update(string $table, array $data, array $where): int
+    {
+        //merge data and where together
+        $collection = array_merge($data, $where);
+
+        //collect the values from collection
+        $values = array_values($collection);
+
+        //setup fields
+        $fieldDetails = null;
+        foreach ($data as $key => $value) {
+            $fieldDetails .= "$key = ?,";
+        }
+        $fieldDetails = rtrim($fieldDetails, ',');
+
+        //setup where 
+        $whereDetails = null;
+        $i = 0;
+        foreach ($where as $key => $value) {
+            $whereDetails .= $i == 0 ? "$key = ?" : " AND $key = ?";
+            $i++;
+        }
+
+        $stmt = $this->run("UPDATE $table SET $fieldDetails WHERE $whereDetails", $values);
+
+        return $stmt->rowCount();
+    }
+
+    public function delete(string $table, array $where, int $limit = 1): int
+    {
+        //collect the values from collection
+        $values = array_values($where);
+
+        //setup where 
+        $whereDetails = null;
+        $i = 0;
+        foreach ($where as $key => $value) {
+            $whereDetails .= $i == 0 ? "$key = ?" : " AND $key = ?";
+            $i++;
+        }
+
+        //if limit is a number use a limit on the query
+        if (is_numeric($limit)) {
+            $limit = "LIMIT $limit";
+        }
+
+        $stmt = $this->run("DELETE FROM $table WHERE $whereDetails $limit", $values);
+
+        return $stmt->rowCount();
+    }
+
+    public function truncate(string $table): int
+    {
+        $stmt = $this->run("TRUNCATE TABLE $table");
+
+        return $stmt->rowCount();
+    }
+
     public function __destruct()
     {
         $this->db = null;
