@@ -1,5 +1,5 @@
 <?php
-// declare(strict_types=1);
+declare(strict_types=1);
 
 namespace Framework\Components;
 
@@ -53,12 +53,12 @@ final class Database {
         return $stmt;
     }
 
-    public function rows(string $sql, array $args = [], $fetchMode = PDO::FETCH_OBJ): array
+    public function rows(string $sql, array $args = [], int $fetchMode = PDO::FETCH_OBJ): array
     {
         return $this->run($sql, $args)->fetchAll($fetchMode);
     }
 
-    public function row(string $sql, array $args = [], object $fetchMode = PDO::FETCH_OBJ): object
+    public function row(string $sql, array $args = [], int $fetchMode = PDO::FETCH_OBJ): object
     {
         return $this->run($sql, $args)->fetch($fetchMode);
     }
