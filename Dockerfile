@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install vim -y && \
     apt-get install wget -y && \
     apt-get install git -y && \
     apt-get install procps -y && \
-    apt-get install htop -y
+    apt-get install htop -y && \
+    docker-php-ext-install pdo_mysql
 
 RUN cd /tmp && git clone https://github.com/swoole/swoole-src.git && \
     cd swoole-src && \
